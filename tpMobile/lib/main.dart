@@ -79,55 +79,39 @@ class LastPage extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    /*return MaterialApp(
-      title: 'lastPage',
-      theme: ThemeData(
-        
-        primarySwatch: Colors.blue,
-        
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: MyLastPage(title: 'Page de confirmation'),
-    );*/
      return Scaffold(
       appBar : AppBar(
-        title: Text('Launch Screen'),
+        title: Text('Merci d\'avoir commandé'),
       ),
-      body: Center(
-        child:ElevatedButton(
+      body: GridView.count(
+        crossAxisCount: 1,
+        children: <Widget>[
+          Container( 
+            child: Image(image: AssetImage('images/merci.jpg'),
+            height: 50,
+            width: 50,
+            ),
+          ),
+          Container(
+            height: 5,
+            width:10,
+             child : Text('solde sur votre compte: 15€59',
+        style: TextStyle(color: Colors.grey),),
+          ),
+          Container(
+            height: 5,
+            width: 10,
+            child:ElevatedButton(
           child:Text('Go home'),
          onPressed: (){
            Navigator.pop(context);
          },
         ),
+          ),
+        ],
+        
       ),
     );
   }
 }
 
-class MyLastPage extends StatefulWidget {
-  MyLastPage({Key key, this.title}) : super(key: key);
-  final String title;
-  @override
-  _MyLastPageState createState() => _MyLastPageState();
-}
-
-class _MyLastPageState extends State<MyLastPage> {
-  
-  @override
-  Widget build(BuildContext context) {
-   
-    return Scaffold(
-      appBar: AppBar(
-      
-        title: Text(widget.title),
-      ),
-      body: Center(
-       child: new RaisedButton(
-            onPressed: () {Navigator.pop(context);},
-            child:Text("retour au menu"),
-        ),
-      ),
-    );
-} 
-}

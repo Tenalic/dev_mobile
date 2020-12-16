@@ -69,32 +69,33 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     var product1 = new Product(
-        "Zelda breath of the wild", 50, 0, "images/zbotw-switch.jpg");
+        "Zelda breath of the wild", 50, 0, "images/zbotw-switch.jpg", "Switch");
     var product2 =
-        new Product("Ghost of Tsushima", 50, 1, "images/gos-ps4.jpg");
+        new Product("Ghost of Tsushima", 50, 1, "images/gos-ps4.jpg", "PS4");
+    var product3 = new Product("Fifa 21", 70, 2, "images/f21-xbox.jpg", "Xbox");
+    var product4 = new Product("Taiko no Tatsujin Drum'n'Fun!", 40, 3,
+        "images/tnt-switch.jpg", "switch");
+    var product5 =
+        new Product("Marvel's Spider-Man", 20, 4, "images/msp-ps4.jpg", "PS4");
+    var product6 = new Product(
+        "Baten Kaitos : Les Ailes éternelles et l'Océan perdu",
+        50,
+        5,
+        "images/bk-gamecube.jpg",
+        "GameCube");
+    var product7 = new Product(
+        "Pokemon rubis", 40, 6, "images/pvr-gba.jpg", "GameBoyAdvance");
 
     productList.add(product1);
     productList.add(product2);
+    productList.add(product3);
+    productList.add(product4);
+    productList.add(product5);
+    productList.add(product6);
+    productList.add(product7);
 
-    List list = new List();
-
-    for (Product product in productList) {
-      list.add(ListTile(
-        leading: Icon(Icons.games),
-        title: Text(product.name),
-      ));
-    }
-
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
       body: GridView.builder(
@@ -102,10 +103,11 @@ class _MyHomePageState extends State<MyHomePage> {
         gridDelegate:
             new SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
         itemBuilder: (BuildContext ctx, int index) {
-          return ListTile(
+          return Image(image: AssetImage(productList[index].image));
+          /*ListTile(
             leading: Icon(Icons.games),
             title: Text(productList[index].name),
-          );
+          );*/
         },
       ),
       floatingActionButton: FloatingActionButton(
@@ -122,11 +124,13 @@ class Product {
   double prix;
   int id;
   String image;
+  String console;
 
-  Product(String name, double prix, int id, String image) {
+  Product(String name, double prix, int id, String image, String console) {
     this.name = name;
     this.prix = prix;
     this.id = id;
     this.image = image;
+    this.console = console;
   }
 }

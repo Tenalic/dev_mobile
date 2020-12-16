@@ -48,6 +48,11 @@ flutter:
   assets:
      - images/gos-ps4.jpg
      - images/zbotw-switch.jpg
+     - images/f21-xbox.jpg
+     - images/tnt-switch.jpg
+     - images/msp-ps4.jpg
+     - images/bk-gamecube.jpg
+     - images/pvr-gba.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

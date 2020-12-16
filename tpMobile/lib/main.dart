@@ -103,11 +103,20 @@ class _MyHomePageState extends State<MyHomePage> {
         gridDelegate:
             new SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
         itemBuilder: (BuildContext ctx, int index) {
-          return Image(image: AssetImage(productList[index].image));
-          /*ListTile(
-            leading: Icon(Icons.games),
-            title: Text(productList[index].name),
-          );*/
+          return Stack(children: <Widget>[
+            Positioned(
+              height: 140,
+              width: 140,
+              child: Image(image: AssetImage(productList[index].image)),
+            ),
+            Positioned(bottom: 0, child: Text(productList[index].name)),
+            Positioned(
+                bottom: 20, child: Text(productList[index].prix.toString())),
+            Positioned(
+              bottom: 40,
+              child: Text(productList[index].console),
+            ),
+          ]);
         },
       ),
       floatingActionButton: FloatingActionButton(

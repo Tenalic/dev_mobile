@@ -27,6 +27,9 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
+/**
+ * Page principale
+ */
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
 
@@ -35,13 +38,6 @@ class _MyHomePageState extends State<MyHomePage> {
   List checkedList = List();
 
   Panier panier = Panier();
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-      print(_counter);
-    });
-  }
 
   void _checked(int index, bool value) {
     setState(() {
@@ -60,8 +56,7 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
+  void _initListProduct() {
     productList.add(new Product("Zelda breath of the wild", 50, 0,
         "images/zbotw-switch.jpg", "Switch"));
     productList.add(
@@ -80,15 +75,30 @@ class _MyHomePageState extends State<MyHomePage> {
         "GameCube"));
     productList.add(new Product(
         "Pokemon rubis", 40, 6, "images/pvr-gba.jpg", "GameBoyAdvance"));
+  }
 
-    _initListCheked(productList.length);
+  @override
+  Widget build(BuildContext context) {
+    if (productList.length == 0) {
+      _initListProduct();
+      _initListCheked(productList.length);
+    }
 
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
         actions: [
           Stack(children: <Widget>[
-            IconButton(icon: new Icon(Icons.shopping_cart), onPressed: null),
+            IconButton(
+                icon: new Icon(Icons.shopping_cart),
+                onPressed: () {
+                  if (panier.listeProduct.length > 0) {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return PanierPage(panier);
+                    }));
+                  }
+                }),
             Text(panier.listeProduct.length.toString())
           ])
         ],
@@ -102,7 +112,14 @@ class _MyHomePageState extends State<MyHomePage> {
             Positioned(
               height: 140,
               width: 140,
-              child: Image(image: AssetImage(productList[index].image)),
+              child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return DetailsProduit(productList[index]);
+                    }));
+                  },
+                  child: Image(image: AssetImage(productList[index].image))),
             ),
             Positioned(bottom: 0, child: Text(productList[index].name)),
             Positioned(
@@ -122,11 +139,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 ))
           ]);
         },
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
       ),
     );
   }
@@ -155,5 +167,111 @@ class Panier {
   Panier() {
     this.prix = 0;
     this.listeProduct = List();
+  }
+}
+
+/**
+ * Page panier
+ */
+class PanierPage extends StatelessWidget {
+  Panier panier;
+
+  PanierPage(Panier panier) {
+    this.panier = panier;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    int _counter = 0;
+
+    void _incrementCounter() {}
+
+    return Scaffold(
+      appBar: AppBar(
+        actions: [
+          Stack(children: <Widget>[
+            IconButton(icon: new Icon(Icons.shopping_cart), onPressed: () {}),
+          ])
+        ],
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            GestureDetector(
+              onTap: () {
+                print("toutch");
+              }, // handle your image tap here
+              child: Image.asset(
+                panier.listeProduct[0].image, // 'images/tnt-switch.jpg',
+                fit: BoxFit.cover, // this is the solution for border
+              ),
+            ),
+            Text(
+              '$_counter',
+              style: Theme.of(context).textTheme.headline4,
+            ),
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _incrementCounter,
+        tooltip: 'Increment',
+        child: Icon(Icons.add),
+      ),
+    );
+  }
+}
+
+/**
+ * Page details
+ */
+class DetailsProduit extends StatelessWidget {
+  Product product;
+
+  DetailsProduit(Product product) {
+    this.product = product;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    int _counter = 0;
+
+    void _incrementCounter() {}
+
+    return Scaffold(
+      appBar: AppBar(
+        actions: [
+          Stack(children: <Widget>[
+            IconButton(icon: new Icon(Icons.shopping_cart), onPressed: () {}),
+          ])
+        ],
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            GestureDetector(
+              onTap: () {
+                print("toutch");
+              }, // handle your image tap here
+              child: Image.asset(
+                product.image, // 'images/tnt-switch.jpg',
+                fit: BoxFit.cover, // this is the solution for border
+              ),
+            ),
+            Text(
+              '$_counter',
+              style: Theme.of(context).textTheme.headline4,
+            ),
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _incrementCounter,
+        tooltip: 'Increment',
+        child: Icon(Icons.add),
+      ),
+    );
   }
 }

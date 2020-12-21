@@ -32,10 +32,32 @@ class _MyHomePageState extends State<MyHomePage> {
 
   List productList = List();
 
+  List checkedList = List();
+
+  Panier panier = Panier();
+
   void _incrementCounter() {
     setState(() {
       _counter++;
+      print(_counter);
     });
+  }
+
+  void _checked(int index, bool value) {
+    setState(() {
+      checkedList[index] = value;
+      if (value == true) {
+        panier.listeProduct.add(productList[index]);
+      } else {
+        panier.listeProduct.remove(productList[index]);
+      }
+    });
+  }
+
+  void _initListCheked(int taille) {
+    for (int i = 0; i < taille; i++) {
+      checkedList.add(false);
+    }
   }
 
   @override
@@ -59,11 +81,16 @@ class _MyHomePageState extends State<MyHomePage> {
     productList.add(new Product(
         "Pokemon rubis", 40, 6, "images/pvr-gba.jpg", "GameBoyAdvance"));
 
+    _initListCheked(productList.length);
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
         actions: [
-          Icon(Icons.shopping_cart),
+          Stack(children: <Widget>[
+            IconButton(icon: new Icon(Icons.shopping_cart), onPressed: null),
+            Text(panier.listeProduct.length.toString())
+          ])
         ],
       ),
       body: GridView.builder(
@@ -88,9 +115,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 right: 0,
                 top: 0,
                 child: Checkbox(
-                  value: false,
+                  value: checkedList[index],
                   onChanged: (bool value) {
-                    value = !value;
+                    _checked(index, value);
                   },
                 ))
           ]);
@@ -118,5 +145,15 @@ class Product {
     this.id = id;
     this.image = image;
     this.console = console;
+  }
+}
+
+class Panier {
+  double prix;
+  List<Product> listeProduct;
+
+  Panier() {
+    this.prix = 0;
+    this.listeProduct = List();
   }
 }

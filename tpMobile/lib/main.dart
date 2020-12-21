@@ -251,19 +251,15 @@ class DetailsProduit extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            GestureDetector(
-              onTap: () {
-                print("toutch");
-              }, // handle your image tap here
-              child: Image.asset(
-                product.image, // 'images/tnt-switch.jpg',
-                fit: BoxFit.cover, // this is the solution for border
-              ),
+            Image.asset(
+              product.image, // 'images/tnt-switch.jpg',
+              fit: BoxFit.cover, // this is the solution for border
             ),
             Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
+              product.name,
             ),
+            Text(product.console),
+            Text(product.prix.toString() + '€')
           ],
         ),
       ),

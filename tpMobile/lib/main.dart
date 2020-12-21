@@ -27,12 +27,8 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-/**
- * Page principale
- */
+/// Page principale
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
   List productList = List();
 
   List checkedList = List();
@@ -183,9 +179,7 @@ class Panier {
   }
 }
 
-/**
- * Page panier
- */
+///Page panier
 class PanierPage extends StatelessWidget {
   Panier panier;
 
@@ -214,60 +208,83 @@ class PanierPage extends StatelessWidget {
             ])
           ],
         ),
-        body: ListView.builder(
-            itemCount: panier.listeProduct.length,
-            itemBuilder: (context, index) {
-              return Stack(
-                children: <Widget>[
-                  Image.asset(
-                    panier.listeProduct[index].image,
-                    width: 140,
-                    height: 140,
-                  ),
-                  Positioned(
-                      top: 10,
-                      left: 150,
-                      child: Text(panier.listeProduct[index].name)),
-                  Positioned(
-                      top: 30,
-                      left: 150,
-                      child: Text(panier.listeProduct[index].console)),
-                  Positioned(
-                      top: 50,
-                      left: 150,
-                      child: Text(panier.listeProduct[index].prix.toString())),
-                  Positioned(
-                      right: 0,
-                      top: 50,
-                      child: Checkbox(
-                        value: panierToBuyBool[index],
-                        onChanged: (value) {
-                          panierToBuyBool[index] = value;
-                          if (value == true) {
-                            panierToBuy.listeProduct
-                                .add(panier.listeProduct[index]);
-                            panierToBuy.prix = panierToBuy.prix +
-                                panier.listeProduct[index].prix;
-                          } else {
-                            if (panierToBuy.listeProduct
-                                    .remove(panier.listeProduct[index]) ==
-                                true) {
-                              panierToBuy.prix = panierToBuy.prix -
+        body: SingleChildScrollView(
+            child: Column(children: <Widget>[
+          Text('Panier :'),
+          ListView.builder(
+              shrinkWrap: true,
+              itemCount: panier.listeProduct.length,
+              itemBuilder: (context, index) {
+                return Stack(
+                  children: <Widget>[
+                    Image.asset(
+                      panier.listeProduct[index].image,
+                      width: 140,
+                      height: 140,
+                    ),
+                    Positioned(
+                        top: 10,
+                        left: 150,
+                        child: Text(panier.listeProduct[index].name)),
+                    Positioned(
+                        top: 30,
+                        left: 150,
+                        child: Text(panier.listeProduct[index].console)),
+                    Positioned(
+                        top: 50,
+                        left: 150,
+                        child: Text(
+                            panier.listeProduct[index].prix.toString() + ' €')),
+                    Positioned(
+                        right: 0,
+                        top: 50,
+                        child: Checkbox(
+                          value: panierToBuyBool[index],
+                          onChanged: (value) {
+                            panierToBuyBool[index] = value;
+                            if (value == true) {
+                              panierToBuy.listeProduct
+                                  .add(panier.listeProduct[index]);
+                              panierToBuy.prix = panierToBuy.prix +
                                   panier.listeProduct[index].prix;
+                            } else {
+                              if (panierToBuy.listeProduct
+                                      .remove(panier.listeProduct[index]) ==
+                                  true) {
+                                panierToBuy.prix = panierToBuy.prix -
+                                    panier.listeProduct[index].prix;
+                              }
                             }
-                          }
-                        },
-                      ))
-                ],
-              );
-            })
-            );
+                          },
+                        )),
+                  ],
+                );
+              }),
+          Text('total : ' + panierToBuy.prix.toString() + ' €'),
+          Text('Ou veux-tu te faire livrer ?'),
+          Text('En salle de TD ?'),
+          TextFormField(
+            decoration: InputDecoration(labelText: 'Rue'),
+          ),
+          TextFormField(
+            decoration: InputDecoration(labelText: 'Ville'),
+          ),
+          TextFormField(
+            decoration: InputDecoration(labelText: 'Code Postal'),
+          ),
+          RaisedButton(
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return BlaTest();//TODO : remplacer par la class de la dernière page
+              }));
+            },
+            child: Text('Passer commande'),
+          )
+        ])));
   }
 }
 
-/**
- * Page details
- */
+/// Page details
 class DetailsProduit extends StatelessWidget {
   Product product;
 
@@ -332,6 +349,48 @@ class DetailsProduit extends StatelessWidget {
             )
           ],
         ),
+      ),
+    );
+  }
+}
+
+
+///TODO : A supr
+class BlaTest extends StatelessWidget {
+  int _counter = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              'You have pushed the button this many times:',
+            ),
+            GestureDetector(
+              onTap: () {
+                print("toutch");
+              }, // handle your image tap here
+              child: Image.asset(
+                'images/f21-xbox.jpg',
+                fit: BoxFit.cover, // this is the solution for border
+                width: 110.0,
+                height: 110.0,
+              ),
+            ),
+            Text(
+              '$_counter',
+              style: Theme.of(context).textTheme.headline4,
+            ),
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        tooltip: 'Increment',
+        child: Icon(Icons.add),
       ),
     );
   }

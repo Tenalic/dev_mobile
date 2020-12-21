@@ -50,6 +50,12 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  void _updateChecked(int index, bool value) {
+    setState(() {
+      checkedList[index] = value;
+    });
+  }
+
   void _initListCheked(int taille) {
     for (int i = 0; i < taille; i++) {
       checkedList.add(false);
@@ -113,11 +119,13 @@ class _MyHomePageState extends State<MyHomePage> {
               height: 140,
               width: 140,
               child: GestureDetector(
-                  onTap: () {
-                    Navigator.push(context,
+                  onTap: () async {
+                    panier = await Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
-                      return DetailsProduit(productList[index]);
+                      return DetailsProduit(productList[index], panier);
                     }));
+                    _updateChecked(productList[index].id,
+                        panier.listeProduct.contains(productList[index]));
                   },
                   child: Image(image: AssetImage(productList[index].image))),
             ),
@@ -229,15 +237,27 @@ class PanierPage extends StatelessWidget {
 class DetailsProduit extends StatelessWidget {
   Product product;
 
-  DetailsProduit(Product product) {
+  Panier panier;
+
+  bool _value;
+
+  void _checked(bool value) {
+    _value = value;
+    if (value == true) {
+      panier.listeProduct.add(product);
+    } else {
+      panier.listeProduct.remove(product);
+    }
+  }
+
+  DetailsProduit(Product product, Panier panier) {
     this.product = product;
+    this.panier = panier;
   }
 
   @override
   Widget build(BuildContext context) {
-    int _counter = 0;
-
-    void _incrementCounter() {}
+    _value = panier.listeProduct.contains(product);
 
     return Scaffold(
       appBar: AppBar(
@@ -251,26 +271,29 @@ class DetailsProduit extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            GestureDetector(
-              onTap: () {
-                print("toutch");
-              }, // handle your image tap here
-              child: Image.asset(
-                product.image, // 'images/tnt-switch.jpg',
-                fit: BoxFit.cover, // this is the solution for border
-              ),
+            Image.asset(
+              product.image, // 'images/tnt-switch.jpg',
+              fit: BoxFit.cover, // this is the solution for border
             ),
             Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
+              'Jeu : ' + product.name,
             ),
+            Text('Console : ' + product.console),
+            Text('Prix : ' + product.prix.toString() + '€'),
+            Checkbox(
+              value: _value,
+              onChanged: (value) {
+                _value = value;
+                if (value == true) {
+                  panier.listeProduct.add(product);
+                } else {
+                  panier.listeProduct.remove(product);
+                }
+                Navigator.pop(context, panier);
+              },
+            )
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
       ),
     );
   }

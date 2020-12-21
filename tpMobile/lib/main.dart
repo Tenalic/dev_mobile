@@ -213,12 +213,7 @@ class PanierPage extends StatelessWidget {
             ),
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ),
+      )
     );
   }
 }
@@ -264,6 +259,23 @@ class DetailsProduit extends StatelessWidget {
               '$_counter',
               style: Theme.of(context).textTheme.headline4,
             ),
+            Text('Console : ' + product.console),
+            Text('Prix : ' + product.prix.toString() + '€'),
+            Checkbox(
+              value: _value,
+              onChanged: (value) {
+                _value = value;
+                if (value == true) {
+                  panier.listeProduct.add(product);
+                  panier.prix = panier.prix + product.prix;
+                } else {
+                  if(panier.listeProduct.remove(product) == true) {
+                    panier.prix = panier.prix - product.prix;
+                  }
+                }
+                Navigator.pop(context, panier);
+              },
+            )
           ],
         ),
       ),

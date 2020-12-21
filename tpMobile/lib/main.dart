@@ -44,8 +44,10 @@ class _MyHomePageState extends State<MyHomePage> {
       checkedList[index] = value;
       if (value == true) {
         panier.listeProduct.add(productList[index]);
+        panier.prix = panier.prix + productList[index].prix;
       } else {
         panier.listeProduct.remove(productList[index]);
+        panier.prix = panier.prix - productList[index].prix;
       }
     });
   }
@@ -120,12 +122,15 @@ class _MyHomePageState extends State<MyHomePage> {
               width: 140,
               child: GestureDetector(
                   onTap: () async {
-                    panier = await Navigator.push(context,
+                    Panier _panier = await Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
                       return DetailsProduit(productList[index], panier);
                     }));
-                    _updateChecked(productList[index].id,
-                        panier.listeProduct.contains(productList[index]));
+                    if (_panier != null) {
+                      panier = _panier;
+                      _updateChecked(productList[index].id,
+                          panier.listeProduct.contains(productList[index]));
+                    }
                   },
                   child: Image(image: AssetImage(productList[index].image))),
             ),
@@ -184,45 +189,79 @@ class Panier {
 class PanierPage extends StatelessWidget {
   Panier panier;
 
+  Panier panierToBuy;
+
+  List<bool> panierToBuyBool;
+
   PanierPage(Panier panier) {
     this.panier = panier;
+    panierToBuy = panier;
+    panierToBuyBool = List();
   }
 
   @override
   Widget build(BuildContext context) {
-    int _counter = 0;
-
-    void _incrementCounter() {}
+    for (int i = 0; i < panier.listeProduct.length; i++) {
+      panierToBuyBool.add(true);
+    }
 
     return Scaffold(
-      appBar: AppBar(
-        actions: [
-          Stack(children: <Widget>[
-            IconButton(icon: new Icon(Icons.shopping_cart), onPressed: () {}),
-          ])
-        ],
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            GestureDetector(
-              onTap: () {
-                print("toutch");
-              }, // handle your image tap here
-              child: Image.asset(
-                panier.listeProduct[0].image, // 'images/tnt-switch.jpg',
-                fit: BoxFit.cover, // this is the solution for border
-              ),
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
+        appBar: AppBar(
+          actions: [
+            Stack(children: <Widget>[
+              Icon(Icons.shopping_cart),
+              Text(panier.listeProduct.length.toString())
+            ])
           ],
         ),
-      )
-    );
+        body: ListView.builder(
+            itemCount: panier.listeProduct.length,
+            itemBuilder: (context, index) {
+              return Stack(
+                children: <Widget>[
+                  Image.asset(
+                    panier.listeProduct[index].image,
+                    width: 140,
+                    height: 140,
+                  ),
+                  Positioned(
+                      top: 10,
+                      left: 150,
+                      child: Text(panier.listeProduct[index].name)),
+                  Positioned(
+                      top: 30,
+                      left: 150,
+                      child: Text(panier.listeProduct[index].console)),
+                  Positioned(
+                      top: 50,
+                      left: 150,
+                      child: Text(panier.listeProduct[index].prix.toString())),
+                  Positioned(
+                      right: 0,
+                      top: 50,
+                      child: Checkbox(
+                        value: panierToBuyBool[index],
+                        onChanged: (value) {
+                          panierToBuyBool[index] = value;
+                          if (value == true) {
+                            panierToBuy.listeProduct
+                                .add(panier.listeProduct[index]);
+                            panierToBuy.prix = panierToBuy.prix +
+                                panier.listeProduct[index].prix;
+                          } else {
+                            if (panierToBuy.listeProduct
+                                    .remove(panier.listeProduct[index]) ==
+                                true) {
+                              panierToBuy.prix = panierToBuy.prix -
+                                  panier.listeProduct[index].prix;
+                            }
+                          }
+                        },
+                      ))
+                ],
+              );
+            })
+            );
   }
 }
 
@@ -235,15 +274,6 @@ class DetailsProduit extends StatelessWidget {
   Panier panier;
 
   bool _value;
-
-  void _checked(bool value) {
-    _value = value;
-    if (value == true) {
-      panier.listeProduct.add(product);
-    } else {
-      panier.listeProduct.remove(product);
-    }
-  }
 
   DetailsProduit(Product product, Panier panier) {
     this.product = product;
@@ -258,7 +288,17 @@ class DetailsProduit extends StatelessWidget {
       appBar: AppBar(
         actions: [
           Stack(children: <Widget>[
-            IconButton(icon: new Icon(Icons.shopping_cart), onPressed: () {}),
+            IconButton(
+                icon: new Icon(Icons.shopping_cart),
+                onPressed: () {
+                  if (panier.listeProduct.length > 0) {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return PanierPage(panier);
+                    }));
+                  }
+                }),
+            Text(panier.listeProduct.length.toString())
           ])
         ],
       ),
@@ -283,7 +323,7 @@ class DetailsProduit extends StatelessWidget {
                   panier.listeProduct.add(product);
                   panier.prix = panier.prix + product.prix;
                 } else {
-                  if(panier.listeProduct.remove(product) == true) {
+                  if (panier.listeProduct.remove(product) == true) {
                     panier.prix = panier.prix - product.prix;
                   }
                 }

@@ -9,7 +9,6 @@ void main() {
         '/lastScreen': (context) => LastPage(),
       },
   ));
-
 }
 
 class MyApp extends StatelessWidget {
@@ -49,11 +48,10 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  
+class _MyHomePageState extends State<MyHomePage> {  
   @override
   Widget build(BuildContext context) {
-   
+  
     return Scaffold(
       appBar: AppBar(
       
@@ -72,7 +70,6 @@ class _MyHomePageState extends State<MyHomePage> {
     print("demarage page");
   }
 }
-
 }
 
 class LastPage extends StatelessWidget {
@@ -83,7 +80,21 @@ class LastPage extends StatelessWidget {
       appBar : AppBar(
         title: Text('Merci d\'avoir commandé'),
       ),
-      body: GridView.count(
+      body: new Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget> [
+        Image(image: AssetImage('images/merci.jpg')),
+         Text('solde sur votre compte: 15€59', style: TextStyle(color: Colors.grey)),
+         ElevatedButton(
+          child: Text('Retour au menu principal'),
+         onPressed: (){
+           Navigator.pop(context);
+         },
+        ),
+        ],
+        
+      ),
+      /* GridView.count(
         crossAxisCount: 1,
         children: <Widget>[
           Container( 
@@ -102,16 +113,15 @@ class LastPage extends StatelessWidget {
             height: 5,
             width: 10,
             child:ElevatedButton(
-          child:Text('Go home'),
+          child:Text('Retour au menu principal'),
          onPressed: (){
            Navigator.pop(context);
          },
         ),
           ),
         ],
-        
-      ),
-    );
+        */
+      );
   }
 }
 

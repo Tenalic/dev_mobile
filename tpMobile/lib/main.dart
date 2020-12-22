@@ -275,7 +275,7 @@ class PanierPage extends StatelessWidget {
           RaisedButton(
             onPressed: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return LastPage();//TODO : remplacer par la class de la dernière page
+                return LastPage();
               }));
             },
             child: Text('Passer commande'),
@@ -354,50 +354,7 @@ class DetailsProduit extends StatelessWidget {
   }
 }
 
-
-///TODO : A supr
-class BlaTest extends StatelessWidget {
-  int _counter = 0;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            GestureDetector(
-              onTap: () {
-                print("toutch");
-              }, // handle your image tap here
-              child: Image.asset(
-                'images/f21-xbox.jpg',
-                fit: BoxFit.cover, // this is the solution for border
-                width: 110.0,
-                height: 110.0,
-              ),
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ),
-    );
-  }
-}
-
 class LastPage extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
      return Scaffold(

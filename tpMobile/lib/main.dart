@@ -275,11 +275,11 @@ class PanierPage extends StatelessWidget {
           RaisedButton(
             onPressed: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return BlaTest();//TODO : remplacer par la class de la dernière page
+                return LastPage();//TODO : remplacer par la class de la dernière page
               }));
             },
             child: Text('Passer commande'),
-          )
+          ),
         ])));
   }
 }
@@ -393,5 +393,32 @@ class BlaTest extends StatelessWidget {
         child: Icon(Icons.add),
       ),
     );
+  }
+}
+
+class LastPage extends StatelessWidget {
+  // This widget is the root of your application.
+  @override
+  Widget build(BuildContext context) {
+     return Scaffold(
+      appBar : AppBar(
+        title: Text('Merci d\'avoir commandé'),
+      ),
+      body: new Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget> [
+        Image(image: AssetImage('images/merci.jpg')),
+         Text('solde sur votre compte: 15€59', style: TextStyle(color: Colors.grey)),
+         ElevatedButton(
+          child: Text('Retour au menu principal'),
+         onPressed: (){
+           Navigator.popUntil(context,ModalRoute.withName('/'));
+         },
+        ),
+        ],
+        
+      ),
+      
+      );
   }
 }

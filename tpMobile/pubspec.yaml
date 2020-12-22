@@ -53,6 +53,8 @@ flutter:
      - images/msp-ps4.jpg
      - images/bk-gamecube.jpg
      - images/pvr-gba.jpg
+     - images/merci.jpg
+  
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
